@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\fcgru\source\repos\GameBreakout\GameBreakout\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\fcgru\source\repos\GameBreakout\GameBreakout\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -127,6 +127,7 @@
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="particle_generator.cpp" />
+    <ClCompile Include="post_processor.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite_renderer.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="game_level.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="particle_generator.h" />
+    <ClInclude Include="post_processor.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite_renderer.h" />
