@@ -52,16 +52,19 @@ class Game
 {
 public:
 	// Game state
-	GameState              State;
-	GLboolean              Keys[1024];
-	GLuint                 Width, Height;
-	std::vector<GameLevel> Levels;
-	GLuint                 Level;
-	std::vector<PowerUp>   PowerUps;
+	GameState				State;
+	GLboolean				Keys[1024];
+	GLboolean				KeysProcessed[1024];
+	GLuint					Width, Height;
+	std::vector<GameLevel>	Levels;
+	GLuint					Level;
+	std::vector<PowerUp>	PowerUps;
+	GLuint					Lives;
 
 	// Constructor/Destructor
 	Game(GLuint width, GLuint height);
 	~Game();
+
 	// Initialize game state (load all shaders/textures/levels)
 	void Init();
 	// GameLoop
