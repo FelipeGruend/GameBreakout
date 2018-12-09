@@ -11,12 +11,14 @@
 #include "sprite_renderer.h"
 #include "game_object.h"
 #include "ball_object.h"
+#include "particle_generator.h"
 
 
 // Game-related State data
 SpriteRenderer  *Renderer;
 GameObject      *Player;
 BallObject      *Ball;
+ParticleGenerator   *Particles;
 
 Game::Game(GLuint width, GLuint height)
 	: State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -29,26 +31,37 @@ Game::~Game()
 	delete Renderer;
 	delete Player;
 	delete Ball;
+	delete Particles;
 }
 
 void Game::Init()
 {
 	// Load shaders
-	ResourceManager::LoadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, "sprite");
+	ResourceManager::LoadShader("shaders/sprite.vert", "shaders/sprite.frag", nullptr, "sprite");
+	ResourceManager::LoadShader("shaders/particle.vert", "shaders/particle.frag", nullptr, "particle");
+
 	// Configure shaders
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
+	ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
+
 	// Load textures
 	ResourceManager::LoadTexture("textures/background.jpg", GL_FALSE, "background");
 	ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, "face");
 	ResourceManager::LoadTexture("textures/block.png", GL_FALSE, "block");
 	ResourceManager::LoadTexture("textures/block_solid.png", GL_FALSE, "block_solid");
 	ResourceManager::LoadTexture("textures/paddle.png", true, "paddle");
+	ResourceManager::LoadTexture("textures/particle.png", GL_TRUE, "particle");
+
 	// Set render-specific controls
-	Shader myShader;
-	myShader = ResourceManager::GetShader("sprite");
-	Renderer = new SpriteRenderer(myShader);
+	Shader spriteShader, particleShader;
+	spriteShader = ResourceManager::GetShader("sprite");
+	Renderer = new SpriteRenderer(spriteShader);
+	particleShader = ResourceManager::GetShader("particle");
+	Particles = new ParticleGenerator(particleShader, ResourceManager::GetTexture("particle"), 500);
+
 	// Load levels
 	GameLevel one; one.Load("levels/1.lvl", this->Width, this->Height * 0.5);
 	GameLevel two; two.Load("levels/2.lvl", this->Width, this->Height * 0.5);
@@ -76,6 +89,8 @@ void Game::Update(GLfloat dt)
 	Ball->Move(dt, this->Width);
 	// Check for collisions
 	this->DoCollisions();
+	// Update particles
+	Particles->Update(dt, *Ball, 2, glm::vec2(Ball->Radius / 2));
 	// Check loss condition
 	if (Ball->Position.y >= this->Height) // Did ball reach bottom edge?
 	{
@@ -126,6 +141,8 @@ void Game::Render()
 		this->Levels[this->Level].Draw(*Renderer);
 		// Draw player
 		Player->Draw(*Renderer);
+		// Draw particles	
+		Particles->Draw();
 		// Draw ball
 		Ball->Draw(*Renderer);
 	}
@@ -133,13 +150,13 @@ void Game::Render()
 
 void Game::ResetLevel()
 {
-	if (this->Level == 0)this->Levels[0].Load("levels/one.lvl", this->Width, this->Height * 0.5f);
+	if (this->Level == 0)this->Levels[0].Load("levels/1.lvl", this->Width, this->Height * 0.5f);
 	else if (this->Level == 1)
-		this->Levels[1].Load("levels/two.lvl", this->Width, this->Height * 0.5f);
+		this->Levels[1].Load("levels/2.lvl", this->Width, this->Height * 0.5f);
 	else if (this->Level == 2)
-		this->Levels[2].Load("levels/three.lvl", this->Width, this->Height * 0.5f);
+		this->Levels[2].Load("levels/3.lvl", this->Width, this->Height * 0.5f);
 	else if (this->Level == 3)
-		this->Levels[3].Load("levels/four.lvl", this->Width, this->Height * 0.5f);
+		this->Levels[3].Load("levels/4.lvl", this->Width, this->Height * 0.5f);
 }
 
 void Game::ResetPlayer()
