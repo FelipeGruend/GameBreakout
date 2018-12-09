@@ -10,11 +10,14 @@
 #ifndef GAME_H
 #define GAME_H
 #include <vector>
+#include <tuple>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "game_object.h"
 #include "game_level.h"
+#include "power_up.h"
 
 // Represents the current state of the game
 enum GameState {
@@ -54,6 +57,8 @@ public:
 	GLuint                 Width, Height;
 	std::vector<GameLevel> Levels;
 	GLuint                 Level;
+	std::vector<PowerUp>   PowerUps;
+
 	// Constructor/Destructor
 	Game(GLuint width, GLuint height);
 	~Game();
@@ -63,9 +68,14 @@ public:
 	void ProcessInput(GLfloat dt);
 	void Update(GLfloat dt);
 	void Render();
+	void DoCollisions();
+	// Reset
 	void ResetLevel();
 	void ResetPlayer();
-	void DoCollisions();
+	void ResetPowerUps();
+	// Powerups
+	void SpawnPowerUps(GameObject &block);
+	void UpdatePowerUps(GLfloat dt);
 };
 
 #endif
