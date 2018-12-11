@@ -151,6 +151,9 @@ void Game::Init()
 
 void Game::Update(GLfloat dt)
 {
+	if (this->State == GAME_PAUSE)
+		return;
+
 	// Update objects
 	Ball->Move(dt, this->Width);
 
@@ -230,6 +233,12 @@ void Game::ProcessInput(GLfloat dt)
 
 	if (this->State == GAME_ACTIVE)
 	{
+		if (this->Keys[GLFW_KEY_P] && !this->KeysProcessed[GLFW_KEY_P])
+		{
+			this->State = GAME_PAUSE;
+			this->KeysProcessed[GLFW_KEY_P] = GL_TRUE;
+		}
+
 		GLfloat velocity = PLAYER_VELOCITY * dt;
 		// Move playerboard
 		if (this->Keys[GLFW_KEY_A])
@@ -253,11 +262,20 @@ void Game::ProcessInput(GLfloat dt)
 		if (this->Keys[GLFW_KEY_SPACE])
 			Ball->Stuck = false;
 	}
+
+	if (this->State == GAME_PAUSE)
+	{
+		if (this->Keys[GLFW_KEY_P] && !this->KeysProcessed[GLFW_KEY_P])
+		{
+			this->State = GAME_ACTIVE;
+			this->KeysProcessed[GLFW_KEY_P] = GL_TRUE;
+		}
+	}
 }
 
 void Game::Render()
 {
-	if (this->State == GAME_ACTIVE || this->State == GAME_MENU || this->State == GAME_WIN)
+	if (this->State == GAME_ACTIVE || this->State == GAME_MENU || this->State == GAME_WIN || this->State == GAME_PAUSE)
 	{
 		// Begin rendering to postprocessing quad
 		Effects->BeginRender();
@@ -315,6 +333,11 @@ void Game::Render()
 		{
 			Text->RenderText("You WON!!!", 320.0f, this->Height / 2 - 20.0f, 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 			Text->RenderText("Press ENTER to retry or ESC to quit", 130.0f, this->Height / 2, 1.0f, glm::vec3(1.0f, 1.0f, 0.0f));
+		}
+
+		if (this->State == GAME_PAUSE)
+		{
+			Text->RenderText("P A U S E D", this->Width / 2, this->Height / 2, 1.0f);
 		}
 }
 
@@ -418,15 +441,15 @@ void Game::SpawnPowerUps(GameObject &block)
 	if (ShouldSpawn(10 + (this->Level * 10) )) // 1 in 10 + (lvl * 10)
 		this->PowerUps.push_back(PowerUp("speed", glm::vec3(0.5f, 0.5f, 1.0f), 0.0f, block.Position, ResourceManager::GetTexture("powerup_speed")));
 	if (ShouldSpawn(10 + (this->Level * 10)))
-		this->PowerUps.push_back(PowerUp("sticky", glm::vec3(1.0f, 0.5f, 1.0f), 20.0f, block.Position, ResourceManager::GetTexture("powerup_sticky")));
+		this->PowerUps.push_back(PowerUp("sticky", glm::vec3(1.0f, 0.5f, 1.0f), 10.0f, block.Position, ResourceManager::GetTexture("powerup_sticky")));
 	if (ShouldSpawn(15 + (this->Level * 10)))
-		this->PowerUps.push_back(PowerUp("pass-through", glm::vec3(0.5f, 1.0f, 0.5f), 10.0f, block.Position, ResourceManager::GetTexture("powerup_passthrough")));
+		this->PowerUps.push_back(PowerUp("pass-through", glm::vec3(0.5f, 1.0f, 0.5f), 5.0f, block.Position, ResourceManager::GetTexture("powerup_passthrough")));
 	if (ShouldSpawn(15 + (this->Level * 10)))
 		this->PowerUps.push_back(PowerUp("pad-size-increase", glm::vec3(1.0f, 0.6f, 0.4), 0.0f, block.Position, ResourceManager::GetTexture("powerup_increase")));
 	if (ShouldSpawn(70 - (this->Level * 10))) // Negative powerups should spawn more often
-		this->PowerUps.push_back(PowerUp("confuse", glm::vec3(1.0f, 0.3f, 0.3f), 15.0f, block.Position, ResourceManager::GetTexture("powerup_confuse")));
+		this->PowerUps.push_back(PowerUp("confuse", glm::vec3(1.0f, 0.3f, 0.3f), 3.0f, block.Position, ResourceManager::GetTexture("powerup_confuse")));
 	if (ShouldSpawn(70 - (this->Level * 10)))
-		this->PowerUps.push_back(PowerUp("chaos", glm::vec3(0.9f, 0.25f, 0.25f), 15.0f, block.Position, ResourceManager::GetTexture("powerup_chaos")));
+		this->PowerUps.push_back(PowerUp("chaos", glm::vec3(0.9f, 0.25f, 0.25f), 5.0f, block.Position, ResourceManager::GetTexture("powerup_chaos")));
 }
 
 void ActivatePowerUp(PowerUp &powerUp)
