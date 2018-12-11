@@ -337,7 +337,7 @@ void Game::Render()
 
 		if (this->State == GAME_PAUSE)
 		{
-			Text->RenderText("P A U S E D", this->Width / 2, this->Height / 2, 1.0f);
+			Text->RenderText("P A U S E D", (this->Width / 2) - 85.0f, this->Height / 2, 1.0f);
 		}
 }
 
