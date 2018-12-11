@@ -131,34 +131,35 @@ void Game::Init()
 	this->Levels.push_back(two);
 	this->Levels.push_back(three);
 	this->Levels.push_back(four);
+
 	this->Level = 0;
-	
+
 	// Configure game objects
-	// Player
+	// Player 1
 	glm::vec2 playerPos = glm::vec2(this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y);
 	Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
+	
 	this->Lives = 3;
+
 	// Ball
 	glm::vec2 ballPos = playerPos + glm::vec2(PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2);
 	Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::GetTexture("face"));
 
 	// Audio
 	SoundEngine->play2D("audio/breakout.mp3", GL_TRUE);
-
-	//Effects->Shake = GL_TRUE;
-	//Effects->Confuse = GL_TRUE;
-	//Effects->Chaos = GL_TRUE;
-
 }
 
 void Game::Update(GLfloat dt)
 {
 	// Update objects
 	Ball->Move(dt, this->Width);
+
 	// Check for collisions
 	this->DoCollisions();
+	
 	// Update particles
 	Particles->Update(dt, *Ball, 2, glm::vec2(Ball->Radius / 2));
+
 	// Update PowerUps
 	this->UpdatePowerUps(dt);
 	// Reduce shake time
@@ -414,17 +415,17 @@ GLboolean ShouldSpawn(GLuint chance)
 }
 void Game::SpawnPowerUps(GameObject &block)
 {
-	if (ShouldSpawn(75)) // 1 in 75 chance
+	if (ShouldSpawn(10 + (this->Level * 10) )) // 1 in 10 + (lvl * 10)
 		this->PowerUps.push_back(PowerUp("speed", glm::vec3(0.5f, 0.5f, 1.0f), 0.0f, block.Position, ResourceManager::GetTexture("powerup_speed")));
-	if (ShouldSpawn(75))
+	if (ShouldSpawn(10 + (this->Level * 10)))
 		this->PowerUps.push_back(PowerUp("sticky", glm::vec3(1.0f, 0.5f, 1.0f), 20.0f, block.Position, ResourceManager::GetTexture("powerup_sticky")));
-	if (ShouldSpawn(75))
+	if (ShouldSpawn(15 + (this->Level * 10)))
 		this->PowerUps.push_back(PowerUp("pass-through", glm::vec3(0.5f, 1.0f, 0.5f), 10.0f, block.Position, ResourceManager::GetTexture("powerup_passthrough")));
-	if (ShouldSpawn(75))
+	if (ShouldSpawn(15 + (this->Level * 10)))
 		this->PowerUps.push_back(PowerUp("pad-size-increase", glm::vec3(1.0f, 0.6f, 0.4), 0.0f, block.Position, ResourceManager::GetTexture("powerup_increase")));
-	if (ShouldSpawn(15)) // Negative powerups should spawn more often
+	if (ShouldSpawn(70 - (this->Level * 10))) // Negative powerups should spawn more often
 		this->PowerUps.push_back(PowerUp("confuse", glm::vec3(1.0f, 0.3f, 0.3f), 15.0f, block.Position, ResourceManager::GetTexture("powerup_confuse")));
-	if (ShouldSpawn(15))
+	if (ShouldSpawn(70 - (this->Level * 10)))
 		this->PowerUps.push_back(PowerUp("chaos", glm::vec3(0.9f, 0.25f, 0.25f), 15.0f, block.Position, ResourceManager::GetTexture("powerup_chaos")));
 }
 
@@ -434,6 +435,7 @@ void ActivatePowerUp(PowerUp &powerUp)
 	if (powerUp.Type == "speed")
 	{
 		Ball->Velocity *= 1.2;
+		Ball->Color = glm::vec3(0.5f, 0.5f, 1.0f);
 	}
 	else if (powerUp.Type == "sticky")
 	{
