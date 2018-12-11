@@ -115,6 +115,7 @@ void Game::Init()
 	Colors[2].push_back(glm::vec3(118, 33, 64) / 255.0f);	// #76 21 40
 	Colors[2].push_back(glm::vec3(195, 108, 117) / 255.0f);	// #C3 6C 75
 	Colors[2].push_back(glm::vec3(39, 35, 55) / 255.0f);	// #27 23 37
+
 	// lvl 4
 	Colors[3].push_back(glm::vec3(49, 29, 62) / 255.0f);	// #31 1D 3E
 	Colors[3].push_back(glm::vec3(51, 41, 89) / 255.0f);	// #33 29 59
@@ -143,7 +144,7 @@ void Game::Init()
 
 	// Ball
 	glm::vec2 ballPos = playerPos + glm::vec2(PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2);
-	Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::GetTexture("face"));
+	Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::GetTexture("face"), Colors[this->Level][0]);
 
 	// Audio
 	SoundEngine->play2D("audio/breakout.mp3", GL_TRUE);
@@ -209,14 +210,13 @@ void Game::ProcessInput(GLfloat dt)
 		if (this->Keys[GLFW_KEY_W] && !this->KeysProcessed[GLFW_KEY_W])
 		{
 			this->Level = (this->Level + 1) % 4;
+			Ball->Color = Colors[this->Level][0];
 			this->KeysProcessed[GLFW_KEY_W] = GL_TRUE;
 		}
 		if (this->Keys[GLFW_KEY_S] && !this->KeysProcessed[GLFW_KEY_S])
 		{
-			if (this->Level > 0)
-				--this->Level;
-			else
-				this->Level = 3;
+			this->Level = (this->Level + 1) % 4;
+			Ball->Color = Colors[this->Level][0];
 			this->KeysProcessed[GLFW_KEY_S] = GL_TRUE;
 		}
 	}
