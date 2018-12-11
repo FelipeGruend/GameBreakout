@@ -30,7 +30,7 @@ PostProcessor		*Effects;
 ISoundEngine		*SoundEngine = createIrrKlangDevice();
 GLfloat				ShakeTime = 0.0f;
 TextRenderer		*Text;
-std::vector<glm::vec3> Colors;
+std::vector<glm::vec3> Colors[4];
 
 Game::Game(GLuint width, GLuint height)
 	: State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -64,7 +64,10 @@ void Game::Init()
 	ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
 
 	// Load textures
-	ResourceManager::LoadTexture("textures/background.jpg", GL_FALSE, "background");
+	ResourceManager::LoadTexture("textures/background1.png", GL_FALSE, "background1");
+	ResourceManager::LoadTexture("textures/background2.png", GL_FALSE, "background2");
+	ResourceManager::LoadTexture("textures/background3.png", GL_FALSE, "background3");
+	ResourceManager::LoadTexture("textures/background4.png", GL_FALSE, "background4");
 	ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, "face");
 	ResourceManager::LoadTexture("textures/block.png", GL_FALSE, "block");
 	ResourceManager::LoadTexture("textures/block_solid.png", GL_FALSE, "block_solid");
@@ -93,15 +96,34 @@ void Game::Init()
 	
 	// Setting colors for every level
 	// lvl 1
-	Colors.push_back(glm::vec3(181, 62, 116)  / 255.0f);	// #B5 3E 74
-	Colors.push_back(glm::vec3(252, 212, 139) / 255.0f);	// #FC D4 8B
-	Colors.push_back(glm::vec3(205, 183, 250) / 255.0f);	// #CD B7 FA
-	Colors.push_back(glm::vec3(229, 199, 198) / 255.0f);	// #E5 C7 C6
+	Colors[0].push_back(glm::vec3(181, 62, 116)  / 255.0f);	// #B5 3E 74
+	Colors[0].push_back(glm::vec3(252, 212, 139) / 255.0f);	// #FC D4 8B
+	Colors[0].push_back(glm::vec3(205, 183, 250) / 255.0f);	// #CD B7 FA
+	Colors[0].push_back(glm::vec3(229, 199, 198) / 255.0f);	// #E5 C7 C6
 
-	GameLevel one; one.Load("levels/1.lvl", Colors, this->Width, this->Height * 0.5);
-	GameLevel two; two.Load("levels/2.lvl", Colors, this->Width, this->Height * 0.5);
-	GameLevel three; three.Load("levels/3.lvl", Colors, this->Width, this->Height * 0.5);
-	GameLevel four; four.Load("levels/4.lvl", Colors, this->Width, this->Height * 0.5);
+	// lvl 2
+	Colors[1].push_back(glm::vec3(94, 173, 255) / 255.0f);	// #5E AD E1
+	Colors[1].push_back(glm::vec3(163, 207, 237) / 255.0f);	// #A3 CF ED
+	Colors[1].push_back(glm::vec3(251, 253, 254) / 255.0f);	// #FB FD FE
+	Colors[1].push_back(glm::vec3(108, 144, 198) / 255.0f);	// #6C 90 C6
+
+	// lvl 3
+	Colors[2].push_back(glm::vec3(46, 28, 44) / 255.0f);	// #2E 1C 2C
+	Colors[2].push_back(glm::vec3(194, 47, 92) / 255.0f);	// #C2 2F 5C
+	Colors[2].push_back(glm::vec3(117, 33, 64) / 255.0f);	// #75 21 40
+	Colors[2].push_back(glm::vec3(195, 107, 117) / 255.0f);	// #C3 6B 75
+
+	// lvl 4
+	Colors[3].push_back(glm::vec3(49, 29, 62) / 255.0f);	// #31 1D 3E
+	Colors[3].push_back(glm::vec3(99, 208, 220) / 255.0f);	// #63 D0 DC
+	Colors[3].push_back(glm::vec3(51, 42, 90) / 255.0f);	// #33 2A 5A
+	Colors[3].push_back(glm::vec3(79, 154, 172) / 255.0f);	// #4F 9A AC
+
+
+	GameLevel one; one.Load("levels/1.lvl", Colors[0], this->Width, this->Height * 0.5);
+	GameLevel two; two.Load("levels/2.lvl", Colors[1], this->Width, this->Height * 0.5);
+	GameLevel three; three.Load("levels/3.lvl", Colors[2], this->Width, this->Height * 0.5);
+	GameLevel four; four.Load("levels/4.lvl", Colors[3], this->Width, this->Height * 0.5);
 	this->Levels.push_back(one);
 	this->Levels.push_back(two);
 	this->Levels.push_back(three);
@@ -236,8 +258,27 @@ void Game::Render()
 		// Begin rendering to postprocessing quad
 		Effects->BeginRender();
 		// Draw background
+		std::string name;
+		switch (this->Level) {
+			case 0:
+				name = "background1";
+				break;
+			case 1:
+				name = "background2";
+				break;
+			case 2:
+				name = "background3";
+				break;
+			case 3:
+				name = "background4";
+				break;
+			default:
+				name = "background4";
+				break;
+		}
+		
 		Texture2D myTexture;
-		myTexture = ResourceManager::GetTexture("background");
+		myTexture = ResourceManager::GetTexture(name);
 		Renderer->DrawSprite(myTexture, glm::vec2(0, 0), glm::vec2(this->Width, this->Height), 0.0f);
 		// Draw level
 		this->Levels[this->Level].Draw(*Renderer);
@@ -278,13 +319,13 @@ void Game::ResetLevel()
 	ResetPowerUps();
 	this->Lives = 3;
 
-	if (this->Level == 0)this->Levels[0].Load("levels/1.lvl", Colors, this->Width, this->Height * 0.5f);
+	if (this->Level == 0)this->Levels[0].Load("levels/1.lvl", Colors[0], this->Width, this->Height * 0.5f);
 	else if (this->Level == 1)
-		this->Levels[1].Load("levels/2.lvl", Colors, this->Width, this->Height * 0.5f);
+		this->Levels[1].Load("levels/2.lvl", Colors[1], this->Width, this->Height * 0.5f);
 	else if (this->Level == 2)
-		this->Levels[2].Load("levels/3.lvl", Colors, this->Width, this->Height * 0.5f);
+		this->Levels[2].Load("levels/3.lvl", Colors[2], this->Width, this->Height * 0.5f);
 	else if (this->Level == 3)
-		this->Levels[3].Load("levels/4.lvl", Colors, this->Width, this->Height * 0.5f);
+		this->Levels[3].Load("levels/4.lvl", Colors[3], this->Width, this->Height * 0.5f);
 }
 
 void Game::ResetPlayer()
