@@ -311,7 +311,7 @@ void Game::Render()
 			if (!powerUp.Destroyed)
 				powerUp.Draw(*Renderer);
 		// Draw particles	
-		Particles->Draw();
+		Particles->Draw(Colors[this->Level][0]);
 		// Draw ball
 		Ball->Draw(*Renderer);
 		// End rendering to postprocessing quad
