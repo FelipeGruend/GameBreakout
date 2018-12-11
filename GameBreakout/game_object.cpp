@@ -8,7 +8,6 @@
 ******************************************************************/
 #include "game_object.h"
 
-
 GameObject::GameObject()
 	: Position(0, 0), Size(1, 1), Velocity(0.0f), Color(1.0f), Rotation(0.0f), Sprite(), IsSolid(false), Destroyed(false) { }
 

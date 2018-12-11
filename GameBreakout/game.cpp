@@ -98,26 +98,29 @@ void Game::Init()
 	// lvl 1
 	Colors[0].push_back(glm::vec3(181, 62, 116)  / 255.0f);	// #B5 3E 74
 	Colors[0].push_back(glm::vec3(252, 212, 139) / 255.0f);	// #FC D4 8B
-	Colors[0].push_back(glm::vec3(205, 183, 250) / 255.0f);	// #CD B7 FA
-	Colors[0].push_back(glm::vec3(229, 199, 198) / 255.0f);	// #E5 C7 C6
+	Colors[0].push_back(glm::vec3(203, 181, 253) / 255.0f);	// #CB B5 FD
+	Colors[0].push_back(glm::vec3(221, 196, 220) / 255.0f);	// #DD C4 DC
+	Colors[0].push_back(glm::vec3(236, 202, 180) / 255.0f);	// #EC CA B4
 
 	// lvl 2
-	Colors[1].push_back(glm::vec3(94, 173, 255) / 255.0f);	// #5E AD E1
-	Colors[1].push_back(glm::vec3(163, 207, 237) / 255.0f);	// #A3 CF ED
-	Colors[1].push_back(glm::vec3(251, 253, 254) / 255.0f);	// #FB FD FE
-	Colors[1].push_back(glm::vec3(108, 144, 198) / 255.0f);	// #6C 90 C6
+	Colors[1].push_back(glm::vec3(253, 254, 254) / 255.0f);	// #FD FE FE
+	Colors[1].push_back(glm::vec3(111, 178, 255) / 255.0f);	// #6F B2 E1
+	Colors[1].push_back(glm::vec3(150, 200, 234) / 255.0f);	// #96 C8 EA
+	Colors[1].push_back(glm::vec3(76, 160, 219) / 255.0f);	// #4C A0 DB
+	Colors[1].push_back(glm::vec3(187, 220, 242) / 255.0f);	// #BB DC F2
 
 	// lvl 3
 	Colors[2].push_back(glm::vec3(46, 28, 44) / 255.0f);	// #2E 1C 2C
 	Colors[2].push_back(glm::vec3(194, 47, 92) / 255.0f);	// #C2 2F 5C
-	Colors[2].push_back(glm::vec3(117, 33, 64) / 255.0f);	// #75 21 40
-	Colors[2].push_back(glm::vec3(195, 107, 117) / 255.0f);	// #C3 6B 75
-
+	Colors[2].push_back(glm::vec3(118, 33, 64) / 255.0f);	// #76 21 40
+	Colors[2].push_back(glm::vec3(195, 108, 117) / 255.0f);	// #C3 6C 75
+	Colors[2].push_back(glm::vec3(39, 35, 55) / 255.0f);	// #27 23 37
 	// lvl 4
 	Colors[3].push_back(glm::vec3(49, 29, 62) / 255.0f);	// #31 1D 3E
-	Colors[3].push_back(glm::vec3(99, 208, 220) / 255.0f);	// #63 D0 DC
-	Colors[3].push_back(glm::vec3(51, 42, 90) / 255.0f);	// #33 2A 5A
-	Colors[3].push_back(glm::vec3(79, 154, 172) / 255.0f);	// #4F 9A AC
+	Colors[3].push_back(glm::vec3(51, 41, 89) / 255.0f);	// #33 29 59
+	Colors[3].push_back(glm::vec3(101, 213, 255) / 255.0f);	// #65 D5 E1
+	Colors[3].push_back(glm::vec3(89, 178, 193) / 255.0f);	// #59 B2 C1
+	Colors[3].push_back(glm::vec3(74, 142, 161) / 255.0f);	// #4A 8E A1
 
 
 	GameLevel one; one.Load("levels/1.lvl", Colors[0], this->Width, this->Height * 0.5);

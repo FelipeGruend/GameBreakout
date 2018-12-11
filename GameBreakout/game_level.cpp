@@ -68,7 +68,7 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, std::vector<glm:
 			{
 				glm::vec2 pos(unit_width * x, unit_height * y);
 				glm::vec2 size(unit_width, unit_height);
-				GameObject obj(pos, size, ResourceManager::GetTexture("block_solid"), glm::vec3(0.8f, 0.8f, 0.7f));
+				GameObject obj(pos, size, ResourceManager::GetTexture("block_solid"), colors[colors.size() - 1]);
 				obj.IsSolid = GL_TRUE;
 				this->Bricks.push_back(obj);
 			}
