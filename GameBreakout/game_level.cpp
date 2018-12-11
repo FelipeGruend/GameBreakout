@@ -12,7 +12,7 @@
 #include <sstream>
 
 
-void GameLevel::Load(const GLchar *file, GLuint levelWidth, GLuint levelHeight)
+void GameLevel::Load(const GLchar *file, std::vector<glm::vec3> colors, GLuint levelWidth, GLuint levelHeight)
 {
 	// Clear old data
 	this->Bricks.clear();
@@ -33,7 +33,7 @@ void GameLevel::Load(const GLchar *file, GLuint levelWidth, GLuint levelHeight)
 			tileData.push_back(row);
 		}
 		if (tileData.size() > 0)
-			this->init(tileData, levelWidth, levelHeight);
+			this->init(tileData, colors, levelWidth, levelHeight);
 	}
 }
 
@@ -52,7 +52,7 @@ GLboolean GameLevel::IsCompleted()
 	return GL_TRUE;
 }
 
-void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidth, GLuint levelHeight)
+void GameLevel::init(std::vector<std::vector<GLuint>> tileData, std::vector<glm::vec3> colors, GLuint levelWidth, GLuint levelHeight)
 {
 	// Calculate dimensions
 	GLuint height = tileData.size();
@@ -75,14 +75,13 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidt
 			else if (tileData[y][x] > 1)	// Non-solid; now determine its color based on level data
 			{
 				glm::vec3 color = glm::vec3(1.0f); // original: white
-				if (tileData[y][x] == 2)
-					color = glm::vec3(0.2f, 0.6f, 1.0f);
-				else if (tileData[y][x] == 3)
-					color = glm::vec3(0.0f, 0.7f, 0.0f);
-				else if (tileData[y][x] == 4)
-					color = glm::vec3(0.8f, 0.8f, 0.4f);
-				else if (tileData[y][x] == 5)
-					color = glm::vec3(1.0f, 0.5f, 0.0f);
+				
+				GLuint n_colors = colors.size();
+				for (GLuint i = 0; i < n_colors; ++i)
+				{
+					if (tileData[y][x] == i + 2)
+						color = colors[i];
+				}
 
 				glm::vec2 pos(unit_width * x, unit_height * y);
 				glm::vec2 size(unit_width, unit_height);

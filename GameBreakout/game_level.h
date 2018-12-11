@@ -30,14 +30,16 @@ public:
 	// Constructor
 	GameLevel() { }
 	// Loads level from file
-	void      Load(const GLchar *file, GLuint levelWidth, GLuint levelHeight);
+	void      Load(const GLchar *file, const GLchar *filecolors, GLuint levelWidth, GLuint levelHeight);
 	// Render level
 	void      Draw(SpriteRenderer &renderer);
 	// Check if the level is completed (all non-solid tiles are destroyed)
 	GLboolean IsCompleted();
+	void	Load(const GLchar * file, std::vector<glm::vec3> colors, GLuint levelWidth, GLuint levelHeight);
 private:
 	// Initialize level from tile data
-	void      init(std::vector<std::vector<GLuint>> tileData, GLuint levelWidth, GLuint levelHeight);
+	void init(std::vector<std::vector<GLuint>> tileData, std::vector<glm::vec3> colors, GLuint levelWidth, GLuint levelHeight);
+	
 };
 
 #endif

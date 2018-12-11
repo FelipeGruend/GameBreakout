@@ -30,6 +30,7 @@ PostProcessor		*Effects;
 ISoundEngine		*SoundEngine = createIrrKlangDevice();
 GLfloat				ShakeTime = 0.0f;
 TextRenderer		*Text;
+std::vector<glm::vec3> Colors;
 
 Game::Game(GLuint width, GLuint height)
 	: State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -89,10 +90,18 @@ void Game::Init()
 	Text->Load("fonts/ocraext.ttf", 24);
 
 	// Load levels
-	GameLevel one; one.Load("levels/1.lvl", this->Width, this->Height * 0.5);
-	GameLevel two; two.Load("levels/2.lvl", this->Width, this->Height * 0.5);
-	GameLevel three; three.Load("levels/3.lvl", this->Width, this->Height * 0.5);
-	GameLevel four; four.Load("levels/4.lvl", this->Width, this->Height * 0.5);
+	
+	// Setting colors for every level
+	// lvl 1
+	Colors.push_back(glm::vec3(181, 62, 116)  / 255.0f);	// #B5 3E 74
+	Colors.push_back(glm::vec3(252, 212, 139) / 255.0f);	// #FC D4 8B
+	Colors.push_back(glm::vec3(205, 183, 250) / 255.0f);	// #CD B7 FA
+	Colors.push_back(glm::vec3(229, 199, 198) / 255.0f);	// #E5 C7 C6
+
+	GameLevel one; one.Load("levels/1.lvl", Colors, this->Width, this->Height * 0.5);
+	GameLevel two; two.Load("levels/2.lvl", Colors, this->Width, this->Height * 0.5);
+	GameLevel three; three.Load("levels/3.lvl", Colors, this->Width, this->Height * 0.5);
+	GameLevel four; four.Load("levels/4.lvl", Colors, this->Width, this->Height * 0.5);
 	this->Levels.push_back(one);
 	this->Levels.push_back(two);
 	this->Levels.push_back(three);
@@ -269,13 +278,13 @@ void Game::ResetLevel()
 	ResetPowerUps();
 	this->Lives = 3;
 
-	if (this->Level == 0)this->Levels[0].Load("levels/1.lvl", this->Width, this->Height * 0.5f);
+	if (this->Level == 0)this->Levels[0].Load("levels/1.lvl", Colors, this->Width, this->Height * 0.5f);
 	else if (this->Level == 1)
-		this->Levels[1].Load("levels/2.lvl", this->Width, this->Height * 0.5f);
+		this->Levels[1].Load("levels/2.lvl", Colors, this->Width, this->Height * 0.5f);
 	else if (this->Level == 2)
-		this->Levels[2].Load("levels/3.lvl", this->Width, this->Height * 0.5f);
+		this->Levels[2].Load("levels/3.lvl", Colors, this->Width, this->Height * 0.5f);
 	else if (this->Level == 3)
-		this->Levels[3].Load("levels/4.lvl", this->Width, this->Height * 0.5f);
+		this->Levels[3].Load("levels/4.lvl", Colors, this->Width, this->Height * 0.5f);
 }
 
 void Game::ResetPlayer()
