@@ -7,3 +7,10 @@ Check the oficial LearnOpenGL [repository](https://github.com/JoeyDeVries/LearnO
 
 ## Compatibility
 This is a Visual Studio project and all relevant libraries are found in /libs and all DLLs found in /Debug. Most part of the linking in project are configured with relative paths already, so it might work independent of the project folder location.
+
+## Screenshots
+
+![Game menu](/screenshots/menu.png)
+
+![Gameplay](/screenshots/in_game.png)
+
