@@ -10,7 +10,8 @@ This is a Visual Studio project and all relevant libraries are found in /libs an
 
 ## Screenshots
 
+[Gameplay video on YouTube](https://youtu.be/HOVShbsk3Ps)
+
 ![Game menu](/screenshots/menu.png)
 
 ![Gameplay](/screenshots/in_game.png)
-
